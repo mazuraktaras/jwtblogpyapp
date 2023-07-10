@@ -1,0 +1,60 @@
+{% extends "blog_base.j2" %}
+
+{% block credentials_form %}
+
+    {% if form.errors %}
+
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+
+            {% for error in field_errors %}
+                <div class="alert alert-danger">
+                    <ul>
+                        <li>{{ form[field_name].label }}: {{ error }}</li>
+                    </ul>
+                </div>
+            {% endfor %}
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    <div style="height: auto; width: auto;">
+
+        <form data-toggle="validator" role="form" method="post">
+            {{ form.csrf_token }}
+            <div class="form-group has-feedback">
+                {{ form.username.label(class='control-label') }}
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    {{ form.username(id='username', type='email', class='form-control') }}
+                </div>
+                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                <div class="help-block with-errors">Enter you email here</div>
+            </div>
+
+
+            <div class="form-group">
+                {{ form.password.label(class='control-label') }}
+
+                <div class="form-inline row">
+                    <div class="form-group col-sm-6">
+                        {{ form.password(id='password', type='password', class='form-control', placeholder='Password', **{'data-minlength': '7'}) }}
+                        <div class="help-block">Minimum of 7 characters</div>
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        {{ form.password(id='passwordConfirm', type='password', class='form-control', placeholder='Confirm',
+                        **{'data-match': '#password', 'data-match-error': 'These passwords do not match'}) }}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

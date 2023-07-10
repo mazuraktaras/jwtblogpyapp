@@ -1,0 +1,72 @@
+{% extends "blog_base.j2" %}
+
+{% block posts %}
+
+    {% for post in posts %}
+
+        <div class="panel panel-primary">
+            <div class="panel-heading"># {{ post.post_id }} {{ post.created_time }} {{ post.username }}</div>
+            <div class="panel-body">{{ post.post_text }}</div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <form method="post">
+                            {{ rate_form.csrf_token }}
+                            {{ rate_form.like(value='1') }}
+                            {{ rate_form.post_id(value='%s'|format(post.post_id)) }}
+                            {% if post.like_it == 1 %}
+                                <button type="submit" class="btn btn-success" style="width: 100px">Like <span
+                                        class="badge">{{ post.likes }}</span>
+                                </button>
+                            {% else %}
+                                <button type="submit" class="btn btn-info" style="width: 100px">Like <span
+                                        class="badge">{{ post.likes }}</span>
+                                </button>
+                            {% endif %}
+
+                        </form>
+                    </div>
+                    <div class="col-sm-2">
+                        <form method="post">
+                            {{ rate_form.csrf_token }}
+                            {{ rate_form.like(value='0') }}
+                            {{ rate_form.post_id(value='%s'|format(post.post_id)) }}
+                            {% if post.like_it == -1 %}
+                                <button type="submit" class="btn btn-danger" style="width: 100px">Dislike <span
+                                        class="badge">{{ post.dislikes }}</span>
+                                </button>
+                            {% else %}
+                                <button type="submit" class="btn btn-info" style="width: 100px">Dislike <span
+                                        class="badge">{{ post.dislikes }}</span>
+                                </button>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    {% endfor %}
+
+    <!--action="## {{ url_for('blog') }}" -->
+
+    <form data-toggle="validator" role="form" method="post">
+        {{ form.csrf_token }}
+        <div class="form-group has-feedback">
+            {{ form.post_text.label(class='control-label') }}
+            <!--<div class="input-group">-->
+            {{ form.post_text(class='form-control') }}
+            <!--</div>-->
+            <!--<span class="glyphicon form-control-feedback" aria-hidden="true"></span>-->
+            <div class="help-block with-errors">Enter you message here</div>
+        </div>
+
+
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+
+
+{% endblock %}
